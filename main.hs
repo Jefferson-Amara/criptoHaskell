@@ -1,11 +1,7 @@
 import Data.IORef
 import Data.List
-import Data.Char(toUpper)
-import Foreign.Marshal.Unsafe
-import Data.Array.IO
 import Control.Monad
 import Data.Char
-)
 
 ------------------------------------------------BEGIN CESAR-------------------------------------------
 let2Int :: Char -> Char -> Int
@@ -37,8 +33,6 @@ encodeC n xs = [shift n x | x <- xs]
 decodeC :: Int -> String -> String
 decodeC n = encodeC (-n)
 
-callCesar :: Int -> String -> Int -> String
-callCesar op text desloc = encodeC desloc text
 ------------------------------------------------END CESAR-----------------------------------------------
 ----------------------------------------------BEGIN VIGENERE--------------------------------------------
 encodeV :: [Char] -> [Char] -> [Char]
@@ -72,20 +66,34 @@ main = do
     putStrLn " METODO 1 - CIFRA DE CESAR"
     putStrLn " METODO 2 - CIFRA DE VIGENERE\n"
 
-    m <- getString "Informe numero do metodo que deseja utilizar: "
+    m <- getLine "Informe numero do metodo que deseja utilizar: "
     let metd = read m::Int
+
 
     putStrLn " OPERACAO 1 - CODIFICAR"
     putStrLn " OPERACAO 2 - DECODIFICAR\n"
 
-    n <- getString "Informe o numero da operacao a realizar: "
-    let op = read n::Int
+    o <- getLine "Informe o numero da operacao a realizar: "
+    let op = read o::Int
 
-    t <- getString "Digite o texto: "
 
-    if(metd==1 && op==1) then
-        callCesar op t 3    
+    t <- getLine "Informe o texto: "
+    let text = read t::String
+
+    if(metd==1) then
+        d <- getLine "Informe o valor do deslocamento"  
     else 
-        callCesar op t 3
+        key <- getLine "Informe o texto chave"
+
+    if(metd==1 && op==1)then
+        e = encodeC d::Int text
+    else if(metd==1 && op==2)then
+        e = decodeC d::Int text
+    else if(metd==2 && op==1)then
+        e = encodeV text key
+    else if(metd==2 && op==2)then
+        e = decodeV text key
+    
+        
 
     return ()
